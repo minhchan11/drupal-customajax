@@ -1,10 +1,11 @@
 <?php
-class DNATest extends DrupalUnitTestCase
+//use Unit Test: DrupalUnitTestCase
+class DNAUnitTest extends DrupalUnitTestCase
 {
     static public function getInfo()
     {
         return array(
-            'name' => 'DNA Maker Test',
+            'name' => 'DNA Maker Unit Test',
             'description' => 'Unit Tests for this module',
             'group' => 'Minh Test Module',
         );
@@ -15,11 +16,54 @@ class DNATest extends DrupalUnitTestCase
            parent::setUp(array('dnamaker'));
     }
 
-    public function testmaker()
+    public function testMethod()
     {
       $description = 'Should return a DNA';
       $output = create('T A G C');
       $expected = 'A T C G';
       $this->assertEqual($expected, $output, "Match");
+    }
+}
+
+// for functional test DrupalWebTestCase
+class DNAFunctionalTest extends DrupalWebTestCase
+{
+    static public function getInfo()
+    {
+        return array(
+            'name' => 'DNA Maker Functional Test',
+            'description' => 'Unit Tests for this module',
+            'group' => 'Minh Test Module',
+        );
+    }
+
+    public function setUp()
+    {
+           parent::setUp(array('dnamaker'));
+    }
+
+    public function testUI()
+    {
+      $this->drupalGet('/dnamaker');
+      $this->assertText(t('Please enter your DNA'));
+
+
+      $data = array(
+        'dna_string' => 'T F G C'
+      );
+      $this->drupalPost('/dnamaker', $data, 'Make DNA');
+      $this->assertText("Please don't enter anything but A T C G upper case","Form Validation");
+
+      $data = array(
+        'dna_string' => ''
+      );
+      $this->drupalPost('/dnamaker', $data, 'Make DNA');
+      $this->assertText("DNA String field is required.","Form Required");
+
+      $data = array(
+        'dna_string' => 'T A G C'
+      );
+      $this->drupalPost('/dnamaker', $data, 'Make DNA');
+      $this->assertText("You have entered T A G C and the matching DNA is A T C G","Result Passed");
     }
 }

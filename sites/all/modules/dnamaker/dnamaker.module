@@ -19,7 +19,7 @@
 
   function dnamaker_form(){
     $form['dna_string'] = array(
-       '#title' => 'Left number',
+       '#title' => 'DNA String',
        '#type' => 'textfield',
        '#description' => t('Please enter your DNA'),
        '#element_validate' => array('element_validate_string'),
