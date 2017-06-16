@@ -1,0 +1,7 @@
+name = DNA Generator
+description = The module that will generate DNA
+package = Minh's
+core = 7.x
+files[] = dnamaker.module
+files[] = dnamaker.test
+dependencies[] = simpletest

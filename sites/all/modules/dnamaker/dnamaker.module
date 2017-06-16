@@ -1,0 +1,76 @@
+<?php
+
+  function dnamaker_menu(){
+    $items['dnamaker'] = array (
+    'title' => 'DNA GENERATOR',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dnamaker_form'),
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+    $items['dnamaker_success_page'] = array (
+    'title' => 'Success',
+    'page callback' => 'dnamaker_success',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+    return $items;
+  }
+
+  function dnamaker_form(){
+    $form['dna_string'] = array(
+       '#title' => 'Left number',
+       '#type' => 'textfield',
+       '#description' => t('Please enter your DNA'),
+       '#element_validate' => array('element_validate_string'),
+       '#required' => TRUE,
+   );
+
+
+   $form['submit'] = array(
+       '#type' => 'submit',
+       '#value' => 'Make DNA',
+   );
+   return $form;
+  }
+
+  function element_validate_string($element){
+    if (preg_match('/[^ACTG\s]/',$element['#value']) != 0){
+      form_error($element,t("Please don't enter anything but A T C G upper case"));
+    }
+  }
+
+  function create($input){
+    $split = explode(" ", $input);
+    $output = array();
+    for ($i=0; $i <sizeof($split) ; $i++) {
+      if($split[$i] == "A") {
+        array_push($output,"T");
+      } elseif ($split[$i] == "T") {
+        array_push($output,"A");
+      } elseif ($split[$i] == "C") {
+        array_push($output,"G");
+      } else {
+        array_push($output,"C");
+      }
+    }
+
+    $result = implode(" ",$output);
+    return $result;
+  }
+
+
+  function dnamaker_form_submit($form, &$form_state) {
+    $input = $form_state['values']['dna_string'];
+    $result = create($input);
+    $_SESSION['userinput'] = $input;
+    $_SESSION['result'] = $result;
+
+    $form_state['redirect'] = 'dnamaker_success_page';
+}
+
+function dnamaker_success() {
+  $input = $_SESSION['userinput'];
+  $output = $_SESSION['result'];
+    return 'You have entered ' . $input . ' and the matching DNA is ' . $output;
+}

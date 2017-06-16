@@ -1,0 +1,25 @@
+<?php
+class DNATest extends DrupalUnitTestCase
+{
+    static public function getInfo()
+    {
+        return array(
+            'name' => 'DNA Maker Test',
+            'description' => 'Unit Tests for this module',
+            'group' => 'Minh Test Module',
+        );
+    }
+
+    public function setUp()
+    {
+           parent::setUp(array('dnamaker'));
+    }
+
+    public function testmaker()
+    {
+      $description = 'Should return a DNA';
+      $output = create('T A G C');
+      $expected = 'A T C G';
+      $this->assertEqual($expected, $output, "Match");
+    }
+}
