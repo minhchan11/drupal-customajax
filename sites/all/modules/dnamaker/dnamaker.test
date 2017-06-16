@@ -18,6 +18,26 @@ class DNAUnitTest extends DrupalUnitTestCase
 
     public function testMethod()
     {
+      $description = 'Helix Match for A';
+      $output = create('A');
+      $expected = 'T';
+      $this->assertEqual($expected, $output, "Match A");
+
+      $description = 'Helix Match for T';
+      $output = create('T');
+      $expected = 'A';
+      $this->assertEqual($expected, $output, "Match T");
+
+      $description = 'Helix Match for C';
+      $output = create('C');
+      $expected = 'G';
+      $this->assertEqual($expected, $output, "Match C");
+
+      $description = 'Helix Match for G';
+      $output = create('G');
+      $expected = 'C';
+      $this->assertEqual($expected, $output, "Match G");
+
       $description = 'Should return a DNA';
       $output = create('T A G C');
       $expected = 'A T C G';
